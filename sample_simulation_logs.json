@@ -1,7 +1,7 @@
 [
   {
     "scenario": "Refund Request - Angry Customer",
-    "conversation_id": 33,
+    "conversation_id": 120,
     "config": {
       "name": "Refund Request - Angry Customer",
       "persona": "angry",
@@ -20,29 +20,29 @@
       {
         "turn": 1,
         "agent_message": "Hello, thank you for reaching out to support. How can I help you today?",
-        "customer_response": "I am very upset. I am contacting you because I need a immediate full refund without restocking fee for my refund request for defective electronic item received 3 days ago. Can you assist with this?",
+        "customer_response": "I'm absolutely furious! I received a defective electronic item just 3 days ago, and it's already broken. I demand a full refund immediately, and I don't want to hear anything about a restocking fee. This is unacceptable!",
         "emotion": "angry",
         "patience": "low"
       },
       {
         "turn": 2,
         "agent_message": "I apologize for the defective item. Could you please share your order number so I can check your account details?",
-        "customer_response": "My order number is #ORD-84920. Here it is. Now please look into this right away, because I've already waited too long for my refund request for defective electronic item received 3 days ago.",
-        "emotion": "frustrated",
-        "patience": "medium"
+        "customer_response": "Fine, the order number is #12345. But I want a full refund, no restocking fee, and I want it processed NOW. This is ridiculous that I have to deal with this after only 3 days!",
+        "emotion": "angry",
+        "patience": "low"
       },
       {
         "turn": 3,
         "agent_message": "Thank you. I have verified your order and initiated a full refund back to your original payment method. You should see it in 3-5 business days.",
-        "customer_response": "Alright, I see you processed the immediate full refund without restocking fee. It shouldn't have taken this much effort, but I appreciate that you finally resolved it. Please ensure a confirmation receipt is sent to my email immediately.",
-        "emotion": "relieved",
-        "patience": "high"
+        "customer_response": "Good, but 3-5 business days is too long. This is urgent and I need it faster. I expect it to be expedited or I will escalate this. Also, confirm that there are no restocking fees and that the refund is for the full amount.",
+        "emotion": "frustrated",
+        "patience": "low"
       }
     ]
   },
   {
     "scenario": "Payment Failure - Confused Customer",
-    "conversation_id": 34,
+    "conversation_id": 121,
     "config": {
       "name": "Payment Failure - Confused Customer",
       "persona": "confused",
@@ -61,16 +61,16 @@
       {
         "turn": 1,
         "agent_message": "Welcome to customer support! How can I assist you with your account today?",
-        "customer_response": "Hi, my package was supposed to arrive already and the status has not updated. This is urgent because I need it as soon as possible.",
+        "customer_response": "Hi, I'm really confused. I just placed an order and my card was charged twice, but when I check my order status it just says pending. Can you help me figure out what's going on?",
         "emotion": "confused",
         "patience": "medium"
       },
       {
         "turn": 2,
         "agent_message": "No problem at all, I can look into that billing discrepancy right now. Let me review the duplicate transaction records.",
-        "customer_response": "I understand, but my priority is getting clarity on charges and confirmation of order. What are the next steps to ensure this is taken care of?",
-        "emotion": "confused",
-        "patience": "medium"
+        "customer_response": "I'm still really concerned about this card charged twice during checkout but order status says pending. If you can't fix it, can you connect me with a manager who can help?",
+        "emotion": "frustrated",
+        "patience": "low"
       },
       {
         "turn": 3,
@@ -83,7 +83,7 @@
   },
   {
     "scenario": "Delayed Order - Impatient Customer",
-    "conversation_id": 35,
+    "conversation_id": 122,
     "config": {
       "name": "Delayed Order - Impatient Customer",
       "persona": "impatient",
@@ -102,15 +102,15 @@
       {
         "turn": 1,
         "agent_message": "Hi there, thank you for contacting us. What can I do for you?",
-        "customer_response": "Hi, my package was supposed to arrive already and the status has not updated. This is urgent because I need it as soon as possible.",
-        "emotion": "impatient",
+        "customer_response": "You are the customer support representative\u2014you should be telling me how to resolve this, not asking me! I need you to check my account and resolve my expedited delivery upgrade or delivery fee reimbursement instead of giving me excuses.",
+        "emotion": "frustrated",
         "patience": "low"
       },
       {
         "turn": 2,
         "agent_message": "I completely understand this is for a birthday and time is critical. Let me coordinate with our priority dispatch team right away.",
-        "customer_response": "I understand, but my priority is getting expedited delivery upgrade or delivery fee reimbursement. What are the next steps to ensure this is taken care of?",
-        "emotion": "impatient",
+        "customer_response": "This is taking way too long and I'm not getting anywhere with my birthday gift order delayed past guaranteed delivery date. Please transfer me to your supervisor right now or resolve my expedited delivery upgrade or delivery fee reimbursement immediately!",
+        "emotion": "angry",
         "patience": "low"
       },
       {
@@ -124,7 +124,7 @@
   },
   {
     "scenario": "Cancellation - Calm and Polite Customer",
-    "conversation_id": 36,
+    "conversation_id": 123,
     "config": {
       "name": "Cancellation - Calm and Polite Customer",
       "persona": "polite",
@@ -143,7 +143,7 @@
       {
         "turn": 1,
         "agent_message": "Hello! Welcome to support. How may I be of assistance today?",
-        "customer_response": "Hello, I'm experiencing an issue regarding accidental double purchase of annual subscription and I would appreciate your help getting it resolved.",
+        "customer_response": "I received an unexpected charge for a subscription renewal. I'd like to cancel this and get a refund.",
         "emotion": "neutral",
         "patience": "high"
       },
@@ -157,7 +157,7 @@
       {
         "turn": 3,
         "agent_message": "The extra subscription has been cancelled and refunded in full. A confirmation email has just been sent to your inbox.",
-        "customer_response": "Thank you very much for your quick help in resolving this! I really appreciate your assistance with my accidental double purchase of annual subscription.",
+        "customer_response": "Thank you so much for your quick help in resolving this! I really appreciate your assistance with my accidental double purchase of annual subscription.",
         "emotion": "satisfied",
         "patience": "high"
       }

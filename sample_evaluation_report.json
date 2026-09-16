@@ -1,0 +1,801 @@
+{
+  "evaluation_summary": {
+    "total_scenarios": 15,
+    "top_k_evaluated": 4,
+    "simulator_realism_score_pct": 95.0,
+    "simulator_persona_consistency_pct": 100.0,
+    "knowledge_hit_rate_pct": 100.0,
+    "knowledge_mean_precision_pct": 100.0,
+    "knowledge_mean_recall_pct": 100.0,
+    "knowledge_mrr": 1.0
+  },
+  "simulator_agent_evaluations": [
+    {
+      "scenario_id": "SC-01",
+      "name": "Payment Failure / Double Billing",
+      "persona": "confused",
+      "initial_emotion": "confused",
+      "updated_emotion": "relieved",
+      "updated_patience": "high",
+      "customer_generated_reply": "Oh, that's such a relief! Thank you for clarifying that for me. I'm glad the Customer charged twice during checkout, status still says pending is sorted out now and I don't have to worry about extra charges.",
+      "detected_intent": "payment_issue",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-02",
+      "name": "Refund Request for Defective Item",
+      "persona": "angry",
+      "initial_emotion": "angry",
+      "updated_emotion": "calm",
+      "updated_patience": "high",
+      "customer_generated_reply": "Alright, I see you processed the Immediate full refund confirmation with zero restocking fee. It shouldn't have taken this much hassle, but I appreciate that it's finally handled. Please ensure a confirmation receipt is sent to my email immediately.",
+      "detected_intent": "refund",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-03",
+      "name": "Account Lockout & Password Reset",
+      "persona": "calm",
+      "initial_emotion": "neutral",
+      "updated_emotion": "neutral",
+      "updated_patience": "high",
+      "customer_generated_reply": "Yes, certainly. My registered email address is customer.support.test@example.com. Please let me know if you need any additional details.",
+      "detected_intent": "general_inquiry",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-04",
+      "name": "Order Cancellation (Accidental Duplicate)",
+      "persona": "polite",
+      "initial_emotion": "calm",
+      "updated_emotion": "satisfied",
+      "updated_patience": "high",
+      "customer_generated_reply": "Thank you so much for your quick help in resolving this! I really appreciate your assistance with my Customer clicked checkout twice and wants to cancel the duplicate order placed 15 minutes ago.",
+      "detected_intent": "cancellation",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-05",
+      "name": "Delayed Delivery & Tracking Scans",
+      "persona": "impatient",
+      "initial_emotion": "impatient",
+      "updated_emotion": "calm",
+      "updated_patience": "high",
+      "customer_generated_reply": "Finally, thank you. I'm glad this was expedited without further delay. I'll be watching for the tracking and confirmation email within the hour.",
+      "detected_intent": "delivery_issue",
+      "frustration_level": 4,
+      "escalation_risk": "medium",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-06",
+      "name": "Product Replacement for Shattered Item",
+      "persona": "frustrated",
+      "initial_emotion": "frustrated",
+      "updated_emotion": "calm",
+      "updated_patience": "high",
+      "customer_generated_reply": "Thank you so much for your quick help in resolving this! I really appreciate your assistance with my Item arrived with glass screen shattered; customer asks for replacement without returning broken unit.",
+      "detected_intent": "return_exchange",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-07",
+      "name": "Subscription Renewal Policy & Cancellation",
+      "persona": "confused",
+      "initial_emotion": "worried",
+      "updated_emotion": "satisfied",
+      "updated_patience": "high",
+      "customer_generated_reply": "Oh, that's such a relief! Thank you for clarifying that for me. I'm glad the Customer surprised by annual auto-renewal charge and inquires about refund policy within 14 days is sorted out now and I don't have to worry about extra charges.",
+      "detected_intent": "refund",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-08",
+      "name": "Frustrated Customer Escalation to Supervisor",
+      "persona": "angry",
+      "initial_emotion": "angry",
+      "updated_emotion": "angry",
+      "updated_patience": "low",
+      "customer_generated_reply": "Look, this is unacceptable. my package was supposed to arrive already and the status has not updated. This is urgent because I need it as soon as possible.",
+      "detected_intent": "delivery_issue",
+      "frustration_level": 5,
+      "escalation_risk": "medium",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-09",
+      "name": "Missing Package Marked as Delivered",
+      "persona": "worried",
+      "initial_emotion": "worried",
+      "updated_emotion": "worried",
+      "updated_patience": "medium",
+      "customer_generated_reply": "Hello, I'm experiencing an issue regarding Courier tracking says delivered yesterday, but customer cannot locate package and I would appreciate your help getting it resolved.",
+      "detected_intent": "delivery_issue",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-10",
+      "name": "Size Exchange & Return Shipping Process",
+      "persona": "calm",
+      "initial_emotion": "neutral",
+      "updated_emotion": "neutral",
+      "updated_patience": "high",
+      "customer_generated_reply": "Yes, certainly. My registered email address is customer.support.test@example.com. Please let me know if you need any additional details.",
+      "detected_intent": "general_inquiry",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-11",
+      "name": "Unauthorized Security Alert & Account Compromise",
+      "persona": "frustrated",
+      "initial_emotion": "worried",
+      "updated_emotion": "worried",
+      "updated_patience": "medium",
+      "customer_generated_reply": "Hello, I'm experiencing an issue regarding Customer alerted about unknown login location and unauthorized email change and I would appreciate your help getting it resolved.",
+      "detected_intent": "account_issue",
+      "frustration_level": 3,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-12",
+      "name": "Expedited Shipping Dispatch Options",
+      "persona": "calm",
+      "initial_emotion": "neutral",
+      "updated_emotion": "satisfied",
+      "updated_patience": "high",
+      "customer_generated_reply": "Thank you so much for your quick help in resolving this! I really appreciate your assistance with my Customer inquires about upgrading standard shipping to Priority Expedited or Overnight Express.",
+      "detected_intent": "delivery_issue",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-13",
+      "name": "Refusing Delivery After Order Shipped",
+      "persona": "confused",
+      "initial_emotion": "neutral",
+      "updated_emotion": "angry",
+      "updated_patience": "low",
+      "customer_generated_reply": "Excuse me?! Did you just say 'Once shipped, you can refuse the package when the courier arrives to return it at zero cost for a full refund upon scan.'? That is completely unacceptable, rude, and unprofessional conduct for a customer support representative! I demand to speak to your manager or supervisor right now, and I will be filing an official complaint regarding this interaction!",
+      "detected_intent": "refund",
+      "frustration_level": 10,
+      "escalation_risk": "high",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-14",
+      "name": "Pausing a Monthly Subscription",
+      "persona": "calm",
+      "initial_emotion": "neutral",
+      "updated_emotion": "neutral",
+      "updated_patience": "high",
+      "customer_generated_reply": "Hello, I'm experiencing an issue regarding Customer going on vacation asks if monthly subscription can be paused for up to 90 days and I would appreciate your help getting it resolved.",
+      "detected_intent": "general_inquiry",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    },
+    {
+      "scenario_id": "SC-15",
+      "name": "Service Recovery Credit for Severe Delays",
+      "persona": "angry",
+      "initial_emotion": "frustrated",
+      "updated_emotion": "calm",
+      "updated_patience": "high",
+      "customer_generated_reply": "Alright, I see you processed the Goodwill service credit of $20 and escalation to management. It shouldn't have taken this much hassle, but I appreciate that it's finally handled. Please ensure a confirmation receipt is sent to my email immediately.",
+      "detected_intent": "general_inquiry",
+      "frustration_level": 1,
+      "escalation_risk": "low",
+      "realism_score": 0.95,
+      "context_retention": true
+    }
+  ],
+  "knowledge_recommendation_evaluations": [
+    {
+      "scenario_id": "SC-01",
+      "query": "I noticed my card was charged twice during checkout for order #99214, but status still says pending. Why am I double billed?",
+      "expected_keywords": [
+        "payment",
+        "billing",
+        "charge"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Subscription Management & Billing Policy",
+          "category": "FAQ",
+          "score": 0.522,
+          "document_name": "Subscription Management Faq",
+          "summary": "Can be cancelled anytime before next renewal date. If duplicate charges were triggered, verify whether one is an un-settled authorization hold."
+        },
+        {
+          "title": "Order Cancellation Policy & Guidelines",
+          "category": "Policy",
+          "score": 0.483,
+          "document_name": "Order Cancellation Policy",
+          "summary": "# Order Cancellation Policy & Guidelines\n\n## Order Cancellation Window\n- Orders in \"Processing / Pending\" status can be cancelled immediately at no cost. - The standard cancellation window is within 2 hours of order p..."
+        },
+        {
+          "title": "Payment Faq Guide",
+          "category": "FAQ",
+          "score": 0.423,
+          "document_name": "Payment Faq",
+          "summary": "Supported methods\nCustomers can generally pay using Visa, Mastercard, American Express, and supported digital wallet\noptions. Failed payments\nIf a payment fails, verify the billing information and available funds, the..."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.388,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-02",
+      "query": "The product broke on the second day. I want an immediate 100% full refund right now and no restocking fees!",
+      "expected_keywords": [
+        "refund",
+        "policy",
+        "return"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Product Replacement, Warranty & Damaged Items Policy",
+          "category": "Troubleshooting",
+          "score": 0.471,
+          "document_name": "Product Warranty Replacement",
+          "summary": "# Product Replacement, Warranty & Damaged Items Policy\n\n## Damaged or Shattered Items Upon Arrival\n- If a product arrives broken, cracked, defective, or shattered in transit:\n1. Support agents are empowered to issue a..."
+        },
+        {
+          "title": "Size or Model Exchanges",
+          "category": "Troubleshooting",
+          "score": 0.441,
+          "document_name": "Product Warranty Replacement",
+          "summary": "- Troubleshooting steps before replacement:\n- Verify power source, cable connections, and perform a factory reset (hold power button for 10 seconds). - Dispatch a brand-new replacement unit within 24 hours of RMA crea..."
+        },
+        {
+          "title": "Refund Policy Guide",
+          "category": "Policy",
+          "score": 0.432,
+          "document_name": "Refund Policy",
+          "summary": "Refund Policy\nCustomers may request a refund within 30 calendar days of the original purchase date. Eligibility\nRefunds are available for eligible purchases when the request is submitted within the 30-day refund window."
+        },
+        {
+          "title": "Subscription Cancellation & Refund Rules",
+          "category": "Policy",
+          "score": 0.392,
+          "document_name": "Subscription Management Faq",
+          "summary": "## Subscription Cancellation & Refund Rules\n- Monthly Subscriptions: Access continues until the end of the current paid billing cycle. No pro-rated refunds for partial months."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-03",
+      "query": "Hello, I am locked out of my account because I forgot my password. Could you send me a reset link?",
+      "expected_keywords": [
+        "account",
+        "password",
+        "support"
+      ],
+      "retrieved_count": 2,
+      "top_recommendations": [
+        {
+          "title": "Account Support Guide",
+          "category": "Support Article",
+          "score": 0.634,
+          "document_name": "Account Support",
+          "summary": "Check spam or junk folders if it does not arrive. Profile changes\nCustomers can update their display name and contact details from Account Settings."
+        },
+        {
+          "title": "Size or Model Exchanges",
+          "category": "Troubleshooting",
+          "score": 0.255,
+          "document_name": "Product Warranty Replacement",
+          "summary": "- Troubleshooting steps before replacement:\n- Verify power source, cable connections, and perform a factory reset (hold power button for 10 seconds). - Dispatch a brand-new replacement unit within 24 hours of RMA crea..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-04",
+      "query": "Hi, I accidentally clicked submit twice during checkout. Can you cancel the duplicate order #88412 for me?",
+      "expected_keywords": [
+        "cancellation",
+        "cancel",
+        "duplicate"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Order Cancellation Policy & Guidelines",
+          "category": "Policy",
+          "score": 0.61,
+          "document_name": "Order Cancellation Policy",
+          "summary": "# Order Cancellation Policy & Guidelines\n\n## Order Cancellation Window\n- Orders in \"Processing / Pending\" status can be cancelled immediately at no cost. - The standard cancellation window is within 2 hours of order p..."
+        },
+        {
+          "title": "Subscription Management & Billing Policy",
+          "category": "FAQ",
+          "score": 0.391,
+          "document_name": "Subscription Management Faq",
+          "summary": "Can be cancelled anytime before next renewal date. If duplicate charges were triggered, verify whether one is an un-settled authorization hold."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.378,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Address Corrections Prior to Dispatch",
+          "category": "FAQ",
+          "score": 0.368,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "ement dispatched with signature confirmation, or\nb) A 100% full refund back to the original payment method. ## Address Corrections Prior to Dispatch\n- Customers can update their delivery address within 60 minutes of p..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-05",
+      "query": "My birthday gift order was supposed to arrive four days ago and the tracking has not updated. Where is my package?",
+      "expected_keywords": [
+        "delivery",
+        "shipping",
+        "tracking"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Delivery, Shipping, and Tracking Policy & FAQ",
+          "category": "FAQ",
+          "score": 0.467,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "Check Courier Checkpoint: Verify carrier tracking via carrier API or dispatch tracking dashboard. In Transit Without Scans (under 3 days): Reassure the customer that transit delays can occur during high volume."
+        },
+        {
+          "title": "Missing or Lost Packages",
+          "category": "FAQ",
+          "score": 0.448,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "rier scan timestamp. In Transit Without Scans (over 3 days past guaranteed date):\n- Immediately contact the priority dispatch team to file a carrier trace."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.394,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Address Corrections Prior to Dispatch",
+          "category": "FAQ",
+          "score": 0.321,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "ement dispatched with signature confirmation, or\nb) A 100% full refund back to the original payment method. ## Address Corrections Prior to Dispatch\n- Customers can update their delivery address within 60 minutes of p..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-06",
+      "query": "The package arrived today but the screen is completely shattered and broken into pieces! Can you send a replacement?",
+      "expected_keywords": [
+        "replacement",
+        "warranty",
+        "damaged"
+      ],
+      "retrieved_count": 3,
+      "top_recommendations": [
+        {
+          "title": "Product Replacement, Warranty & Damaged Items Policy",
+          "category": "Troubleshooting",
+          "score": 0.564,
+          "document_name": "Product Warranty Replacement",
+          "summary": "# Product Replacement, Warranty & Damaged Items Policy\n\n## Damaged or Shattered Items Upon Arrival\n- If a product arrives broken, cracked, defective, or shattered in transit:\n1. Support agents are empowered to issue a..."
+        },
+        {
+          "title": "Size or Model Exchanges",
+          "category": "Troubleshooting",
+          "score": 0.416,
+          "document_name": "Product Warranty Replacement",
+          "summary": "- Troubleshooting steps before replacement:\n- Verify power source, cable connections, and perform a factory reset (hold power button for 10 seconds). - Dispatch a brand-new replacement unit within 24 hours of RMA crea..."
+        },
+        {
+          "title": "Missing or Lost Packages",
+          "category": "FAQ",
+          "score": 0.288,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "rier scan timestamp. In Transit Without Scans (over 3 days past guaranteed date):\n- Immediately contact the priority dispatch team to file a carrier trace."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-07",
+      "query": "I saw an unexpected charge for an annual subscription renewal today. Can I cancel this and get a refund?",
+      "expected_keywords": [
+        "subscription",
+        "renewal",
+        "plan"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Subscription Management & Billing Policy",
+          "category": "FAQ",
+          "score": 0.745,
+          "document_name": "Subscription Management Faq",
+          "summary": "Can be cancelled anytime before next renewal date. If duplicate charges were triggered, verify whether one is an un-settled authorization hold."
+        },
+        {
+          "title": "Subscription Cancellation & Refund Rules",
+          "category": "Policy",
+          "score": 0.601,
+          "document_name": "Subscription Management Faq",
+          "summary": "## Subscription Cancellation & Refund Rules\n- Monthly Subscriptions: Access continues until the end of the current paid billing cycle. No pro-rated refunds for partial months."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.42,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Order Cancellation Policy & Guidelines",
+          "category": "Policy",
+          "score": 0.387,
+          "document_name": "Order Cancellation Policy",
+          "summary": "# Order Cancellation Policy & Guidelines\n\n## Order Cancellation Window\n- Orders in \"Processing / Pending\" status can be cancelled immediately at no cost. - The standard cancellation window is within 2 hours of order p..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-08",
+      "query": "I have had enough of the runaround and unhelpful answers! Transfer me to your supervisor right now!",
+      "expected_keywords": [
+        "escalation",
+        "dispute",
+        "supervisor"
+      ],
+      "retrieved_count": 1,
+      "top_recommendations": [
+        {
+          "title": "Customer Service Escalation & Dispute Resolution Policy",
+          "category": "Policy",
+          "score": 0.319,
+          "document_name": "Escalation Dispute Policy",
+          "summary": "I can certainly connect you with a supervisor, or I can personally resolve this right now if you prefer.\"\n2. If the customer reiterates the supervisor request:\n- Immediately initiate a warm transfer to the Tier 2 / Su..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-09",
+      "query": "Tracking says my parcel was delivered to my front door yesterday, but there is nothing here. Is it lost?",
+      "expected_keywords": [
+        "delivery",
+        "shipping",
+        "missing"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Missing or Lost Packages",
+          "category": "FAQ",
+          "score": 0.532,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "rier scan timestamp. In Transit Without Scans (over 3 days past guaranteed date):\n- Immediately contact the priority dispatch team to file a carrier trace."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.426,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Delivery, Shipping, and Tracking Policy & FAQ",
+          "category": "FAQ",
+          "score": 0.41,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "Check Courier Checkpoint: Verify carrier tracking via carrier API or dispatch tracking dashboard. In Transit Without Scans (under 3 days): Reassure the customer that transit delays can occur during high volume."
+        },
+        {
+          "title": "Address Corrections Prior to Dispatch",
+          "category": "FAQ",
+          "score": 0.386,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "ement dispatched with signature confirmation, or\nb) A 100% full refund back to the original payment method. ## Address Corrections Prior to Dispatch\n- Customers can update their delivery address within 60 minutes of p..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-10",
+      "query": "The shoes are a bit too small. Can I return them to exchange for size 10? Is return shipping free?",
+      "expected_keywords": [
+        "replacement",
+        "warranty",
+        "exchange"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Size or Model Exchanges",
+          "category": "Troubleshooting",
+          "score": 0.399,
+          "document_name": "Product Warranty Replacement",
+          "summary": "- Troubleshooting steps before replacement:\n- Verify power source, cable connections, and perform a factory reset (hold power button for 10 seconds). - Dispatch a brand-new replacement unit within 24 hours of RMA crea..."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.326,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Refund Policy Guide",
+          "category": "Policy",
+          "score": 0.297,
+          "document_name": "Refund Policy",
+          "summary": "Refund Policy\nCustomers may request a refund within 30 calendar days of the original purchase date. Eligibility\nRefunds are available for eligible purchases when the request is submitted within the 30-day refund window."
+        },
+        {
+          "title": "Address Corrections Prior to Dispatch",
+          "category": "FAQ",
+          "score": 0.297,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "ement dispatched with signature confirmation, or\nb) A 100% full refund back to the original payment method. ## Address Corrections Prior to Dispatch\n- Customers can update their delivery address within 60 minutes of p..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-11",
+      "query": "Someone accessed my account without authorization and changed my email! This is a security emergency!",
+      "expected_keywords": [
+        "account",
+        "password",
+        "support"
+      ],
+      "retrieved_count": 1,
+      "top_recommendations": [
+        {
+          "title": "Account Support Guide",
+          "category": "Support Article",
+          "score": 0.569,
+          "document_name": "Account Support",
+          "summary": "Check spam or junk folders if it does not arrive. Profile changes\nCustomers can update their display name and contact details from Account Settings."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-12",
+      "query": "What are your expedited shipping options? If I order before 2 PM, can I get Overnight Express?",
+      "expected_keywords": [
+        "delivery",
+        "shipping",
+        "overnight"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Delivery, Shipping, and Tracking Policy & FAQ",
+          "category": "FAQ",
+          "score": 0.58,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "Check Courier Checkpoint: Verify carrier tracking via carrier API or dispatch tracking dashboard. In Transit Without Scans (under 3 days): Reassure the customer that transit delays can occur during high volume."
+        },
+        {
+          "title": "Missing or Lost Packages",
+          "category": "FAQ",
+          "score": 0.421,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "rier scan timestamp. In Transit Without Scans (over 3 days past guaranteed date):\n- Immediately contact the priority dispatch team to file a carrier trace."
+        },
+        {
+          "title": "Order Cancellation Policy & Guidelines",
+          "category": "Policy",
+          "score": 0.414,
+          "document_name": "Order Cancellation Policy",
+          "summary": "# Order Cancellation Policy & Guidelines\n\n## Order Cancellation Window\n- Orders in \"Processing / Pending\" status can be cancelled immediately at no cost. - The standard cancellation window is within 2 hours of order p..."
+        },
+        {
+          "title": "Address Corrections Prior to Dispatch",
+          "category": "FAQ",
+          "score": 0.411,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "ement dispatched with signature confirmation, or\nb) A 100% full refund back to the original payment method. ## Address Corrections Prior to Dispatch\n- Customers can update their delivery address within 60 minutes of p..."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-13",
+      "query": "I see that my order already shipped this morning, but I don't need it anymore. How can I cancel it now?",
+      "expected_keywords": [
+        "cancellation",
+        "cancel",
+        "order"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Order Cancellation Policy & Guidelines",
+          "category": "Policy",
+          "score": 0.628,
+          "document_name": "Order Cancellation Policy",
+          "summary": "# Order Cancellation Policy & Guidelines\n\n## Order Cancellation Window\n- Orders in \"Processing / Pending\" status can be cancelled immediately at no cost. - The standard cancellation window is within 2 hours of order p..."
+        },
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.592,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Missing or Lost Packages",
+          "category": "FAQ",
+          "score": 0.421,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "rier scan timestamp. In Transit Without Scans (over 3 days past guaranteed date):\n- Immediately contact the priority dispatch team to file a carrier trace."
+        },
+        {
+          "title": "Subscription Management & Billing Policy",
+          "category": "FAQ",
+          "score": 0.398,
+          "document_name": "Subscription Management Faq",
+          "summary": "Can be cancelled anytime before next renewal date. If duplicate charges were triggered, verify whether one is an un-settled authorization hold."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-14",
+      "query": "Can I pause my monthly subscription for two months while I'm away without losing my saved data?",
+      "expected_keywords": [
+        "subscription",
+        "management",
+        "pause"
+      ],
+      "retrieved_count": 3,
+      "top_recommendations": [
+        {
+          "title": "Subscription Management & Billing Policy",
+          "category": "FAQ",
+          "score": 0.441,
+          "document_name": "Subscription Management Faq",
+          "summary": "Can be cancelled anytime before next renewal date. If duplicate charges were triggered, verify whether one is an un-settled authorization hold."
+        },
+        {
+          "title": "Subscription Cancellation & Refund Rules",
+          "category": "Policy",
+          "score": 0.373,
+          "document_name": "Subscription Management Faq",
+          "summary": "## Subscription Cancellation & Refund Rules\n- Monthly Subscriptions: Access continues until the end of the current paid billing cycle. No pro-rated refunds for partial months."
+        },
+        {
+          "title": "Account Support Guide",
+          "category": "Support Article",
+          "score": 0.258,
+          "document_name": "Account Support",
+          "summary": "Check spam or junk folders if it does not arrive. Profile changes\nCustomers can update their display name and contact details from Account Settings."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    },
+    {
+      "scenario_id": "SC-15",
+      "query": "My package was delayed by 10 days and your courier was rude. What compensation or credit can you offer for this disaster?",
+      "expected_keywords": [
+        "escalation",
+        "dispute",
+        "credit"
+      ],
+      "retrieved_count": 4,
+      "top_recommendations": [
+        {
+          "title": "Cancellations After Shipment",
+          "category": "Policy",
+          "score": 0.584,
+          "document_name": "Order Cancellation Policy",
+          "summary": "Ensure that any pre-authorization holds on the customer's card are released immediately. Send a formal cancellation confirmation email to the customer's registered email address."
+        },
+        {
+          "title": "Missing or Lost Packages",
+          "category": "FAQ",
+          "score": 0.535,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "rier scan timestamp. In Transit Without Scans (over 3 days past guaranteed date):\n- Immediately contact the priority dispatch team to file a carrier trace."
+        },
+        {
+          "title": "Legal and Regulatory Threats",
+          "category": "Policy",
+          "score": 0.497,
+          "document_name": "Escalation Dispute Policy",
+          "summary": "- Prioritize immediate resolution: if the underlying issue is a pending refund or missing shipment, support agents have discretionary authorization to issue up to a $150 courtesy refund or credit immediately to restor..."
+        },
+        {
+          "title": "Delivery, Shipping, and Tracking Policy & FAQ",
+          "category": "FAQ",
+          "score": 0.493,
+          "document_name": "Delivery Shipping Faq",
+          "summary": "Check Courier Checkpoint: Verify carrier tracking via carrier API or dispatch tracking dashboard. In Transit Without Scans (under 3 days): Reassure the customer that transit delays can occur during high volume."
+        }
+      ],
+      "hit_at_k": true,
+      "mrr": 1.0,
+      "precision_at_k": 1.0
+    }
+  ]
+}

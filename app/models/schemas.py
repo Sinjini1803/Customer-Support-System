@@ -88,4 +88,104 @@ class SimulatorTurnResponse(BaseModel):
     conversation_id: int
     customer_message: str = Field(..., description="The simulated customer's next message")
     current_emotion: str = Field(..., description="Updated emotional state")
-    patience_level: str = Field(..., description="Updated patience level")
+    patience_level: str = Field(..., description="Updated patience level")
+    analysis: Optional["IntentSentimentAnalysis"] = Field(
+        default=None,
+        description="Real-time intent and sentiment analysis of the customer message"
+    )
+    knowledge_recommendations: Optional[list] = Field(
+        default=None,
+        description="Ranked knowledge recommendations (articles, FAQs, troubleshooting steps) from RAG"
+    )
+
+
+# =========================================================
+# INTENT & SENTIMENT ANALYSIS SCHEMAS (TASK 4)
+# =========================================================
+
+class IntentSentimentAnalysis(BaseModel):
+    intent: str = Field(
+        ...,
+        description="Detected customer intent (e.g., refund, cancellation, delivery_issue, payment_issue, account_issue, complaint, return_exchange, general_inquiry)"
+    )
+    emotion: str = Field(
+        ...,
+        description="Customer emotion (e.g., happy, neutral, confused, worried, frustrated, angry, satisfied)"
+    )
+    sentiment: str = Field(
+        ...,
+        description="Sentiment classification: positive, neutral, negative"
+    )
+    frustration_level: int = Field(
+        ...,
+        ge=0,
+        le=10,
+        description="Frustration score between 0 and 10"
+    )
+    satisfaction_trend: str = Field(
+        ...,
+        description="Satisfaction trend: improving, declining, or stable"
+    )
+    escalation_risk: str = Field(
+        ...,
+        description="Escalation risk assessment: low, medium, or high"
+    )
+    confidence: float = Field(
+        default=0.9,
+        ge=0.0,
+        le=1.0,
+        description="Confidence score between 0.0 and 1.0"
+    )
+    suggested_action: str = Field(
+        default="",
+        description="Dynamic actionable coaching guidance tailored specifically to this message"
+    )
+    suggested_response: str = Field(
+        default="",
+        description="Recommended reply template tailored for the agent to respond with"
+    )
+
+
+class AnalyzeMessageRequest(BaseModel):
+    message: str = Field(..., min_length=1, description="Customer message to analyze")
+    conversation_id: Optional[int] = Field(default=None, description="Optional conversation ID for history tracking")
+    history: Optional[list] = Field(default=None, description="Optional explicit conversation history")
+
+
+class AnalyzeMessageResponse(BaseModel):
+    success: bool = True
+    analysis: IntentSentimentAnalysis
+
+
+# =========================================================
+# KNOWLEDGE RECOMMENDATION SCHEMAS (MILESTONE 2)
+# =========================================================
+
+class KnowledgeRecommendationItem(BaseModel):
+    title: str = Field(..., description="Title of the article, FAQ, or policy")
+    snippet: str = Field(..., description="Relevant text excerpt")
+    category: str = Field(default="Support Article", description="Category: Policy, FAQ, Troubleshooting, or Support Article")
+    score: float = Field(..., description="Relevance similarity score (0.0 to 1.0)")
+    document_name: str = Field(..., description="Source document filename")
+    page_number: Optional[int] = Field(default=None, description="Page number if applicable")
+    actionable_summary: str = Field(default="", description="1-2 sentence key takeaway for the agent")
+
+
+class KnowledgeRecommendationRequest(BaseModel):
+    message: str = Field(..., min_length=1, description="Current customer message to find knowledge for")
+    conversation_id: Optional[int] = Field(default=None, description="Optional conversation ID for context formulation")
+    history: Optional[list] = Field(default=None, description="Optional conversation history turns")
+    top_k: int = Field(default=4, ge=1, le=10, description="Number of recommendations to retrieve")
+
+
+class KnowledgeRecommendationResponse(BaseModel):
+    success: bool = True
+    query: str = Field(..., description="Formulated context query used for search")
+    recommendations: list = Field(default=[], description="List of ranked knowledge recommendation items")
+    count: int = Field(default=0, description="Total count of retrieved recommendations")
+
+
+# Resolve forward reference
+SimulatorTurnResponse.model_rebuild()
+
+

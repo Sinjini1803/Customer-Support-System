@@ -26,8 +26,16 @@ from app.models.schemas import (
     ChatRequest,
     SimulatorTurnRequest,
     SimulatorTurnResponse,
+    AnalyzeMessageRequest,
+    AnalyzeMessageResponse,
+    IntentSentimentAnalysis,
+    KnowledgeRecommendationItem,
+    KnowledgeRecommendationRequest,
+    KnowledgeRecommendationResponse,
 )
 from app.agents.simulator import generate_customer_turn
+from app.agents.intent_sentiment import analyze_customer_message
+from app.agents.knowledge import recommend_knowledge
 
 
 app = FastAPI(title="Support RAG API")
@@ -533,13 +541,34 @@ def simulator_chat(request: SimulatorTurnRequest):
             content=customer_message,
         )
 
-        print("SIMULATOR: returning response")
+        # -------------------------------------------------
+        # Real-time Intent & Sentiment Analysis (Task 4)
+        # -------------------------------------------------
+        print("SIMULATOR: running intent & sentiment analysis")
+        analysis = analyze_customer_message(
+            message=customer_message,
+            history=history,
+        )
+
+        # -------------------------------------------------
+        # Knowledge Recommendations (Milestone 2)
+        # -------------------------------------------------
+        print("SIMULATOR: retrieving knowledge recommendations")
+        knowledge_recs = recommend_knowledge(
+            message=customer_message,
+            history=history,
+            top_k=4,
+        )
+
+        print("SIMULATOR: returning response with analysis and knowledge recommendations")
         return SimulatorTurnResponse(
             success=True,
             conversation_id=conversation_id,
             customer_message=customer_message,
             current_emotion=current_emotion,
             patience_level=patience_level,
+            analysis=analysis,
+            knowledge_recommendations=knowledge_recs,
         )
 
     except HTTPException:
@@ -553,4 +582,73 @@ def simulator_chat(request: SimulatorTurnRequest):
         raise HTTPException(
             status_code=500,
             detail=f"Simulation failed: {type(exc).__name__}: {exc}"
+        )
+
+
+# ---------------------------------------------------------
+# Intent & Sentiment Analysis Endpoint (Task 4)
+# ---------------------------------------------------------
+
+@app.post("/analysis/intent-sentiment", response_model=AnalyzeMessageResponse)
+def analyze_intent_and_sentiment(request: AnalyzeMessageRequest):
+    try:
+        print("\n================ INTENT & SENTIMENT REQUEST ================")
+        history = request.history or []
+        if request.conversation_id is not None and not history:
+            db_history = get_recent_messages(request.conversation_id, limit=10)
+            if db_history:
+                history = db_history
+
+        analysis = analyze_customer_message(
+            message=request.message,
+            history=history,
+        )
+
+        return AnalyzeMessageResponse(
+            success=True,
+            analysis=analysis,
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        print("ANALYSIS ERROR:", repr(exc))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Analysis failed: {type(exc).__name__}: {exc}"
+        )
+
+
+# ---------------------------------------------------------
+# Knowledge Recommendation Endpoint (Milestone 2)
+# ---------------------------------------------------------
+
+@app.post("/recommendations/knowledge", response_model=KnowledgeRecommendationResponse)
+def get_knowledge_recommendations(request: KnowledgeRecommendationRequest):
+    try:
+        print("\n================ KNOWLEDGE RECOMMENDATION REQUEST ================")
+        history = request.history or []
+        if request.conversation_id is not None and not history:
+            db_history = get_recent_messages(request.conversation_id, limit=10)
+            if db_history:
+                history = db_history
+
+        recs = recommend_knowledge(
+            message=request.message,
+            history=history,
+            top_k=request.top_k,
+        )
+
+        return KnowledgeRecommendationResponse(
+            success=True,
+            query=request.message,
+            recommendations=recs,
+            count=len(recs),
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        print("KNOWLEDGE RECOMMENDATION ERROR:", repr(exc))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Recommendation retrieval failed: {type(exc).__name__}: {exc}"
         )
