@@ -110,10 +110,13 @@ You must return a JSON object with EXACTLY the following keys:
 - "sentiment": sentiment classification (one of: "positive", "neutral", "negative")
 - "frustration_level": integer score from 0 to 10
 - "satisfaction_trend": one of: "improving", "declining", "stable"
-- "escalation_risk": one of: "low", "medium", "high"
+- "escalation_risk": one of: "low", "medium", "high", "critical"
+- "escalation_reasoning": string explaining why this risk level was assigned based on indicators like frustration, complaints, or threats
 - "confidence": float between 0.0 and 1.0
 - "suggested_action": specific, actionable coaching recommendation tailored specifically to this exact message and issue
 - "suggested_response": recommended response template for the agent to reply with
+- "response_evaluation": JSON object with keys "tone", "clarity", "empathy", "professionalism" (each an integer 1-5 rating the suggested_response)
+- "communication_tips": list of strings containing actionable communication improvement tips for the agent
 
 Return ONLY the raw JSON object without markdown formatting.
 """
@@ -134,7 +137,7 @@ Provide JSON analysis:
             {"role": "system", "content": system_prompt.strip()},
             {"role": "user", "content": user_prompt.strip()},
         ],
-        max_tokens=500,
+        max_tokens=800,
         temperature=0.1,
     )
 
@@ -160,6 +163,10 @@ Provide JSON analysis:
     # Fallback to dynamic rule generator if LLM omitted action or response
     suggested_action = str(data.get("suggested_action", "")).strip()
     suggested_response = str(data.get("suggested_response", "")).strip()
+    escalation_reasoning = str(data.get("escalation_reasoning", "")).strip()
+    eval_dict = data.get("response_evaluation", {})
+    comm_tips = data.get("communication_tips", [])
+    
     if not suggested_action or not suggested_response:
         def_action, def_resp = _generate_coaching_guidance(
             message,
@@ -171,6 +178,32 @@ Provide JSON analysis:
         )
         suggested_action = suggested_action or def_action
         suggested_response = suggested_response or def_resp
+        
+    from app.models.schemas import ResponseEvaluation
+    
+    evaluation = ResponseEvaluation(
+        tone=eval_dict.get("tone", 5) if isinstance(eval_dict, dict) else 5,
+        clarity=eval_dict.get("clarity", 5) if isinstance(eval_dict, dict) else 5,
+        empathy=eval_dict.get("empathy", 5) if isinstance(eval_dict, dict) else 5,
+        professionalism=eval_dict.get("professionalism", 5) if isinstance(eval_dict, dict) else 5,
+    )
+    
+    if not escalation_reasoning:
+        risk = str(data.get("escalation_risk", "low")).lower()
+        if risk == "critical":
+            escalation_reasoning = "Customer exhibits severe frustration, potential legal/manager threats, or extreme dissatisfaction requiring immediate intervention."
+        elif risk == "high":
+            escalation_reasoning = "High frustration and negative sentiment observed. Immediate de-escalation needed."
+        elif risk == "medium":
+            escalation_reasoning = "Customer is showing signs of impatience or confusion. Clear communication required."
+        else:
+            escalation_reasoning = "Standard inquiry. No immediate escalation risks detected."
+            
+    if not comm_tips:
+        if frustration > 7:
+            comm_tips = ["Acknowledge the customer's frustration immediately.", "Avoid using policies as an excuse.", "Provide a direct, concrete resolution."]
+        else:
+            comm_tips = ["Maintain a polite and professional tone.", "Be clear and concise with next steps."]
 
     return IntentSentimentAnalysis(
         intent=str(data.get("intent", "general_inquiry")).lower(),
@@ -179,9 +212,12 @@ Provide JSON analysis:
         frustration_level=frustration,
         satisfaction_trend=str(data.get("satisfaction_trend", "stable")).lower(),
         escalation_risk=str(data.get("escalation_risk", "low")).lower(),
+        escalation_reasoning=escalation_reasoning,
         confidence=confidence,
         suggested_action=suggested_action,
         suggested_response=suggested_response,
+        response_evaluation=evaluation,
+        communication_tips=comm_tips
     )
 
 
@@ -375,14 +411,20 @@ def _analyze_with_heuristics(
             satisfaction_trend = "stable"
 
     # ---------------------------------------------------------
-    # 6. ESCALATION RISK ASSESSMENT
+    # 6. ESCALATION RISK ASSESSMENT & REASONING
     # ---------------------------------------------------------
-    if has_escalation_phrase or frustration_level >= 8:
+    if has_escalation_phrase and frustration_level >= 8 and len(past_customer_msgs) >= 2:
+        escalation_risk = "critical"
+        escalation_reasoning = "Customer exhibits severe frustration, potential legal/manager threats, or extreme dissatisfaction requiring immediate intervention."
+    elif has_escalation_phrase or frustration_level >= 8:
         escalation_risk = "high"
+        escalation_reasoning = "High frustration and negative sentiment observed. Immediate de-escalation needed."
     elif frustration_level >= 4 or satisfaction_trend == "declining":
         escalation_risk = "medium"
+        escalation_reasoning = "Customer is showing signs of impatience or confusion. Clear communication required."
     else:
         escalation_risk = "low"
+        escalation_reasoning = "Standard inquiry. No immediate escalation risks detected."
 
     confidence = round(min(0.98, max(0.85, intent_confidence + (0.04 if has_escalation_phrase else 0.0))), 2)
 
@@ -398,6 +440,22 @@ def _analyze_with_heuristics(
         history=history,
     )
 
+    from app.models.schemas import ResponseEvaluation
+    
+    evaluation = ResponseEvaluation(
+        tone=3 if frustration_level > 7 else 5,
+        clarity=4 if "confused" in emotion else 5,
+        empathy=3 if escalation_risk in ["high", "critical"] else 5,
+        professionalism=4
+    )
+
+    if frustration_level >= 8:
+        comm_tips = ["Acknowledge the customer's frustration immediately.", "Avoid using policies as an excuse.", "Provide a direct, concrete resolution."]
+    elif escalation_risk == "medium":
+        comm_tips = ["Address the confusion or impatience directly.", "Clearly outline the next steps and expected timeframe."]
+    else:
+        comm_tips = ["Maintain a polite and professional tone.", "Be clear and concise with next steps."]
+
     return IntentSentimentAnalysis(
         intent=intent,
         emotion=emotion,
@@ -405,9 +463,12 @@ def _analyze_with_heuristics(
         frustration_level=frustration_level,
         satisfaction_trend=satisfaction_trend,
         escalation_risk=escalation_risk,
+        escalation_reasoning=escalation_reasoning,
         confidence=confidence,
         suggested_action=suggested_action,
         suggested_response=suggested_response,
+        response_evaluation=evaluation,
+        communication_tips=comm_tips
     )
 
 

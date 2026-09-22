@@ -174,6 +174,13 @@ if app_mode == "🏛️ Three-Panel Live Support Console":
             value=preset_data["resolution"]
         )
 
+        escalation_threshold = st.selectbox(
+            "🚨 Escalation Alert Threshold:",
+            options=["critical", "high", "medium"],
+            index=1,
+            help="Show a global alert if the Escalation Risk hits this level."
+        )
+
         st.divider()
 
         # Check if preset changed, or if user triggers Reset
@@ -343,14 +350,25 @@ if app_mode == "🏛️ Three-Panel Live Support Console":
             if latest_cust_msg:
                 st.info(f"🗣️ *Latest Customer Message:*\n\"{latest_cust_msg['content']}\"")
 
-            # Escalation Risk Alert Banner
+            # Escalation Risk Alert Banner & Reasoning
             risk = analysis.get("escalation_risk", "low").lower()
-            if risk == "high":
-                st.error("🚨 **ESCALATION RISK: HIGH**\nImmediate intervention required. Empathize and offer direct resolution or supervisor queue.")
+            reasoning = analysis.get("escalation_reasoning", "")
+            
+            # Global Alert Overlay Check
+            threshold = escalation_threshold.lower()
+            risk_levels = {"low": 1, "medium": 2, "high": 3, "critical": 4}
+            if risk_levels.get(risk, 1) >= risk_levels.get(threshold, 3):
+                st.toast(f"🚨 ALERT: Escalation Risk is {risk.upper()}!", icon="🚨")
+                st.error(f"**🚨 GLOBAL ESCALATION ALERT ({risk.upper()}):** {reasoning}")
+                
+            if risk == "critical":
+                st.error(f"💥 **ESCALATION RISK: CRITICAL**\n{reasoning}\n*Immediate supervisor intervention required!*")
+            elif risk == "high":
+                st.error(f"🚨 **ESCALATION RISK: HIGH**\n{reasoning}\n*Empathize and offer direct resolution or supervisor queue.*")
             elif risk == "medium":
-                st.warning("⚠️ **ESCALATION RISK: MEDIUM**\nCustomer patience is wearing thin. Provide clear timelines and concrete next actions.")
+                st.warning(f"⚠️ **ESCALATION RISK: MEDIUM**\n{reasoning}\n*Provide clear timelines and concrete next actions.*")
             else:
-                st.success("🛡️ **ESCALATION RISK: LOW**\nRoutine customer exchange. Maintain polite, efficient communication.")
+                st.success(f"🛡️ **ESCALATION RISK: LOW**\n{reasoning}\n*Maintain polite, efficient communication.*")
 
             # Metrics Grid Row 1
             m1, m2 = st.columns(2)
@@ -387,6 +405,27 @@ if app_mode == "🏛️ Three-Panel Live Support Console":
                 st.info(action_text)
             else:
                 st.info("Acknowledge customer concerns empathetically and provide prompt assistance.")
+
+            # Communication Tips
+            comm_tips = analysis.get("communication_tips", [])
+            if comm_tips:
+                st.markdown("🎯 **Actionable Communication Tips**")
+                for tip in comm_tips:
+                    st.markdown(f"- {tip}")
+
+            # Response Evaluation
+            eval_data = analysis.get("response_evaluation", {})
+            if eval_data:
+                st.markdown("📝 **Response Evaluation**")
+                e1, e2, e3, e4 = st.columns(4)
+                with e1:
+                    st.metric("Tone", f"{eval_data.get('tone', 5)}/5")
+                with e2:
+                    st.metric("Clarity", f"{eval_data.get('clarity', 5)}/5")
+                with e3:
+                    st.metric("Empathy", f"{eval_data.get('empathy', 5)}/5")
+                with e4:
+                    st.metric("Professional", f"{eval_data.get('professionalism', 5)}/5")
 
             # Recommended Agent Response Template
             suggested_resp = analysis.get("suggested_response") or ""

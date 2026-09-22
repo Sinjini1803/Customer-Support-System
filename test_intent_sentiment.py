@@ -26,7 +26,7 @@ class TestIntentSentimentAgent(unittest.TestCase):
         self.assertIn(res.emotion, ["angry", "frustrated"])
         self.assertEqual(res.sentiment, "negative")
         self.assertGreaterEqual(res.frustration_level, 8)
-        self.assertEqual(res.escalation_risk, "high")
+        self.assertIn(res.escalation_risk, ["high", "critical"])
 
     def test_scenario_02_polite_refund_request(self):
         msg = "Hello, could you please guide me on how to request a refund for order #1234? It was not quite what I expected, thank you."

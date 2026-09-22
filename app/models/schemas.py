@@ -103,6 +103,12 @@ class SimulatorTurnResponse(BaseModel):
 # INTENT & SENTIMENT ANALYSIS SCHEMAS (TASK 4)
 # =========================================================
 
+class ResponseEvaluation(BaseModel):
+    tone: int = Field(default=5, ge=1, le=5, description="Tone score (1-5)")
+    clarity: int = Field(default=5, ge=1, le=5, description="Clarity score (1-5)")
+    empathy: int = Field(default=5, ge=1, le=5, description="Empathy score (1-5)")
+    professionalism: int = Field(default=5, ge=1, le=5, description="Professionalism score (1-5)")
+
 class IntentSentimentAnalysis(BaseModel):
     intent: str = Field(
         ...,
@@ -128,7 +134,11 @@ class IntentSentimentAnalysis(BaseModel):
     )
     escalation_risk: str = Field(
         ...,
-        description="Escalation risk assessment: low, medium, or high"
+        description="Escalation risk assessment: low, medium, high, or critical"
+    )
+    escalation_reasoning: str = Field(
+        default="",
+        description="Reasoning for the assigned escalation risk score"
     )
     confidence: float = Field(
         default=0.9,
@@ -143,6 +153,14 @@ class IntentSentimentAnalysis(BaseModel):
     suggested_response: str = Field(
         default="",
         description="Recommended reply template tailored for the agent to respond with"
+    )
+    response_evaluation: Optional[ResponseEvaluation] = Field(
+        default_factory=lambda: ResponseEvaluation(tone=5, clarity=5, empathy=5, professionalism=5),
+        description="Evaluation of the agent's recent communication or suggested approach"
+    )
+    communication_tips: list = Field(
+        default=[],
+        description="List of actionable communication improvement tips"
     )
 
 
