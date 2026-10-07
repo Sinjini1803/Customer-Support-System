@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import json
 import os
-from app.models.schemas import SimulatorConfig
 
 API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
@@ -11,7 +10,12 @@ st.set_page_config(page_title="AI Customer Support Coaching", page_icon="🎧", 
 st.sidebar.title("🎛️ Navigation & Modes")
 app_mode = st.sidebar.radio(
     "Select Operating Mode:",
-    ["🏛️ Live Support Console", "📚 Support Knowledge Base & Ingestion"],
+    [
+        "🏛️ Live Support Console",
+        "📋 Post-Interaction Report",
+        "📈 Performance Analytics",
+        "📚 Support Knowledge Base & Ingestion",
+    ],
     index=0,
 )
 st.sidebar.divider()
@@ -387,3 +391,311 @@ elif app_mode == "📚 Support Knowledge Base & Ingestion":
     with col_list:
         st.subheader("📚 Knowledge Base Status")
         st.info("Core Knowledge Corpus Indexed:\n- `delivery_shipping_faq.md`\n- `order_cancellation_policy.md`\n- `product_warranty_replacement.md`\n- `subscription_management_faq.md`\n- `escalation_dispute_policy.md`\n- `refund_policy.pdf`\n- `payment_faq.pdf`\n- `account_support.pdf`")
+
+
+# ===========================================================
+# POST-INTERACTION REPORT PAGE
+# ===========================================================
+elif app_mode == "📋 Post-Interaction Report":
+    st.title("📋 Post-Interaction Summary Report")
+    st.caption("Generate an AI-powered structured report from any completed support conversation.")
+
+    # Determine conversation source
+    source_tab, upload_tab = st.tabs(["🤖 Use Current Simulator Session", "📁 Upload Conversation JSON"])
+
+    with source_tab:
+        st.info("This will use the conversation from your current Simulator Mode session.")
+        messages_to_analyze = st.session_state.get("sim_messages", [])
+        if messages_to_analyze:
+            st.success(f"✅ Current simulator session has **{len(messages_to_analyze)} messages** ready for analysis.")
+        else:
+            st.warning("No simulator session found. Start a simulation first, or upload a conversation JSON.")
+        use_sim = st.button("📋 Generate Report from Simulator Session", type="primary", key="gen_sim_report",
+                             disabled=not messages_to_analyze)
+        if use_sim:
+            with st.spinner("Generating post-interaction report..."):
+                try:
+                    sim_conv_id = st.session_state.get("sim_conversation_id")
+                    session_id_str = str(sim_conv_id) if sim_conv_id is not None else None
+                    r = requests.post(f"{API_URL}/summary/post-interaction",
+                                      json={"conversation": messages_to_analyze,
+                                            "session_id": session_id_str},
+                                      timeout=60)
+                    if r.status_code == 200:
+                        report_data = r.json().get("report", {})
+                        st.session_state.post_report = report_data
+                        
+                        # Auto-save to analytics
+                        try:
+                            requests.post(f"{API_URL}/analytics/session", json=report_data, timeout=10)
+                        except Exception as save_exc:
+                            st.warning(f"Report generated, but failed to auto-save to analytics: {save_exc}")
+
+                        st.rerun()
+                    else:
+                        st.error(f"API error {r.status_code}: {r.text[:200]}")
+                except Exception as e:
+                    st.error(f"Connection error: {e}")
+
+    with upload_tab:
+        uploaded_conv = st.file_uploader("Upload conversation JSON", type=["json"], key="report_upload")
+        if uploaded_conv:
+            if st.button("📋 Generate Report from File", type="primary", key="gen_upload_report"):
+                try:
+                    conv_data = json.load(uploaded_conv)
+                    with st.spinner("Generating post-interaction report..."):
+                        r = requests.post(f"{API_URL}/summary/post-interaction",
+                                          json={"conversation": conv_data}, timeout=60)
+                        if r.status_code == 200:
+                            report_data = r.json().get("report", {})
+                            st.session_state.post_report = report_data
+                            
+                            # Auto-save to analytics
+                            try:
+                                requests.post(f"{API_URL}/analytics/session", json=report_data, timeout=10)
+                            except Exception as save_exc:
+                                st.warning(f"Report generated, but failed to auto-save to analytics: {save_exc}")
+
+                            st.rerun()
+                        else:
+                            st.error(f"API error {r.status_code}: {r.text[:200]}")
+                except Exception as e:
+                    st.error(f"Error: {e}")
+
+    # Display report if available
+    report = st.session_state.get("post_report")
+    if report:
+        st.divider()
+        # Header metrics
+        h1, h2, h3, h4 = st.columns(4)
+        status = report.get("resolution_status", "unresolved")
+        status_icon = {"resolved": "✅", "partially_resolved": "🟡", "unresolved": "❌", "escalated": "🔺"}.get(status, "❓")
+        with h1: st.metric("Resolution Status", f"{status_icon} {status.replace('_', ' ').title()}")
+        with h2: st.metric("Quality Score", f"{report.get('resolution_quality', {}).get('total', 0):.1f} / 100")
+        with h3: st.metric("Max Frustration", f"{report.get('max_frustration', 0)} / 10")
+        with h4:
+            risk = report.get('final_escalation_risk', 'low')
+            risk_icon = {"low": "🟢", "medium": "🟡", "high": "🔴", "critical": "💥"}.get(risk, "⚪")
+            st.metric("Final Risk", f"{risk_icon} {risk.upper()}")
+
+        st.subheader("📝 Conversation Summary")
+        st.write(report.get("conversation_summary", ""))
+
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**🎯 Primary Issue:**")
+            st.info(report.get("primary_issue", ""))
+        with c2:
+            st.markdown("**✅ Final Resolution:**")
+            st.info(report.get("final_resolution", ""))
+
+        # Resolution Quality Breakdown
+        st.subheader("📊 Resolution Quality Score Breakdown")
+        q = report.get("resolution_quality") or {}
+        qc1, qc2, qc3, qc4 = st.columns(4)
+        with qc1:
+            st.metric("Issue Resolution", f"{q.get('issue_resolution', 0):.0f}/100")
+            st.progress(q.get('issue_resolution', 0) / 100)
+        with qc2:
+            st.metric("Communication", f"{q.get('communication_quality', 0):.0f}/100")
+            st.progress(q.get('communication_quality', 0) / 100)
+        with qc3:
+            st.metric("Empathy", f"{q.get('empathy_shown', 0):.0f}/100")
+            st.progress(q.get('empathy_shown', 0) / 100)
+        with qc4:
+            st.metric("Guideline Adherence", f"{q.get('guideline_adherence', 0):.0f}/100")
+            st.progress(q.get('guideline_adherence', 0) / 100)
+
+        # Sentiment Journey
+        st.subheader("📈 Customer Sentiment Journey")
+        journey = report.get("sentiment_journey", [])
+        customer_journey = [j for j in journey if j.get("role") == "user"]
+        if customer_journey:
+            chart_data = {"Turn": [j["turn"] for j in customer_journey],
+                          "Frustration": [j["frustration"] for j in customer_journey]}
+            import pandas as pd
+            df = pd.DataFrame(chart_data).set_index("Turn")
+            st.line_chart(df, color="#FF4B4B")
+            with st.expander("📋 Full Sentiment Timeline"):
+                for j in customer_journey:
+                    risk_c = {"low": "🟢", "medium": "🟡", "high": "🔴", "critical": "💥"}.get(j.get("escalation_risk", "low"), "⚪")
+                    sent_c = {"positive": "🟢", "negative": "🔴", "neutral": "⚪"}.get(j.get("sentiment", "neutral"), "⚪")
+                    st.caption(f"**Turn {j['turn']}** | {j.get('content_snippet', '')} | Emotion: *{j.get('emotion', '')}* | "
+                               f"Frustration: **{j.get('frustration', 0)}/10** | Sentiment: {sent_c} | Risk: {risk_c}")
+
+        # Strengths / Weaknesses
+        sa_col, wk_col = st.columns(2)
+        with sa_col:
+            st.subheader("💪 Agent Strengths")
+            for s in report.get("agent_strengths", []):
+                st.success(f"✅ {s}")
+        with wk_col:
+            st.subheader("⚠️ Areas for Improvement")
+            for w in report.get("agent_weaknesses", []):
+                st.warning(f"⚠️ {w}")
+
+        # Coaching
+        st.subheader("🎓 Personalized Coaching Recommendations")
+        for i, tip in enumerate(report.get("coaching_recommendations", []), 1):
+            st.info(f"**{i}.** {tip}")
+
+        st.divider()
+        if st.button("💾 Save to Performance Analytics", type="primary", key="save_to_analytics"):
+            with st.spinner("Saving session..."):
+                try:
+                    r = requests.post(f"{API_URL}/analytics/session", json=report, timeout=10)
+                    if r.status_code == 200:
+                        st.success("✅ Session saved to Performance Analytics!")
+                    else:
+                        st.error(f"Save failed: {r.text[:200]}")
+                except Exception as e:
+                    st.error(f"Connection error: {e}")
+
+        with st.expander("🔍 View Raw Report JSON"):
+            st.json(report)
+
+
+# ===========================================================
+# PERFORMANCE ANALYTICS DASHBOARD PAGE
+# ===========================================================
+elif app_mode == "📈 Performance Analytics":
+    st.title("📈 Performance Analytics Dashboard")
+    st.caption("Cross-session agent performance insights, escalation trends, and knowledge gap detection.")
+
+    col_refresh, col_clear = st.columns([3, 1])
+    with col_refresh:
+        refresh = st.button("🔄 Refresh Dashboard", type="primary")
+    with col_clear:
+        if st.button("🗑️ Clear All Sessions", type="secondary"):
+            try:
+                r = requests.delete(f"{API_URL}/analytics/sessions", timeout=10)
+                if r.status_code == 200:
+                    st.success(f"Cleared {r.json().get('deleted', 0)} sessions.")
+                    st.rerun()
+            except Exception as e:
+                st.error(str(e))
+
+    try:
+        r = requests.get(f"{API_URL}/analytics/dashboard", timeout=10)
+        if r.status_code != 200:
+            st.error(f"Could not load dashboard: {r.text[:200]}")
+            st.stop()
+        db = r.json().get("dashboard", {})
+    except Exception as e:
+        st.error(f"Cannot connect to API server: {e}")
+        st.stop()
+
+    if db.get("total_sessions", 0) == 0:
+        st.info("📊 No sessions saved yet. Generate and save Post-Interaction Reports to build analytics.")
+        st.stop()
+
+    # Summary KPIs
+    st.subheader("📊 Overall Performance KPIs")
+    k1, k2, k3, k4, k5 = st.columns(5)
+    with k1: st.metric("Total Sessions", db.get("total_sessions", 0))
+    with k2: st.metric("Avg Quality Score", f"{db.get('avg_resolution_quality', 0):.1f}/100")
+    with k3: st.metric("Avg Max Frustration", f"{db.get('avg_frustration', 0):.1f}/10")
+    with k4:
+        ind = db.get("improvement_indicators", {})
+        rate = ind.get("resolution_rate", 0)
+        st.metric("Resolution Rate", f"{rate:.1f}%")
+    with k5:
+        esc_rate = ind.get("escalation_rate", 0)
+        st.metric("Escalation Rate", f"{esc_rate:.1f}%")
+
+    # Resolution breakdown
+    st.subheader("🏆 Session Resolution Breakdown")
+    r1, r2, r3, r4 = st.columns(4)
+    with r1: st.metric("✅ Resolved", db.get("resolved_count", 0))
+    with r2: st.metric("🟡 Partial", db.get("partially_resolved_count", 0))
+    with r3: st.metric("❌ Unresolved", db.get("unresolved_count", 0))
+    with r4: st.metric("🔺 Escalated", db.get("escalated_count", 0))
+
+    st.divider()
+
+    # Charts
+    chart_left, chart_right = st.columns(2)
+    with chart_left:
+        st.subheader("📉 Resolution Quality Trend")
+        trend_data = db.get("resolution_trend", [])
+        if trend_data:
+            import pandas as pd
+            df_trend = pd.DataFrame(trend_data)[["session_id", "quality"]].set_index("session_id")
+            st.bar_chart(df_trend, color="#4B8BFF")
+        else:
+            st.info("No trend data yet.")
+
+    with chart_right:
+        st.subheader("⚡ Escalation Risk Frequency")
+        esc_freq = db.get("escalation_frequency", {})
+        if esc_freq:
+            import pandas as pd
+            esc_colors = {"low": "#27AE60", "medium": "#F39C12", "high": "#E74C3C", "critical": "#8E44AD"}
+            df_esc = pd.DataFrame({"Risk Level": list(esc_freq.keys()), "Count": list(esc_freq.values())}).set_index("Risk Level")
+            st.bar_chart(df_esc)
+        else:
+            st.info("No escalation data yet.")
+
+    st.divider()
+
+    # Common intents & knowledge gaps
+    intent_col, gap_col = st.columns(2)
+    with intent_col:
+        st.subheader("🎯 Common Customer Intents")
+        common = db.get("common_intents", {})
+        for intent, count in common.items():
+            label = intent.replace("_", " ").title()
+            st.write(f"- **{label}**: {count} session{'s' if count != 1 else ''}")
+
+    with gap_col:
+        st.subheader("🕵️ Knowledge Gaps Detected")
+        gaps = db.get("knowledge_gaps", [])
+        if gaps:
+            for gap in gaps:
+                st.warning(f"⚠️ **{gap}** — low resolution quality detected")
+        else:
+            st.success("✅ No significant knowledge gaps detected.")
+
+    st.divider()
+
+    # Improvement indicators
+    st.subheader("📊 Agent Improvement Indicators")
+    ind = db.get("improvement_indicators", {})
+    ic1, ic2 = st.columns(2)
+    with ic1:
+        qt = ind.get("quality_trend", "stable")
+        qt_icon = "📈" if qt == "improving" else ("📉" if qt == "declining" else "➡️")
+        st.metric("Quality Trend", f"{qt_icon} {qt.title()}")
+        st.caption(f"First half avg: {ind.get('first_half_avg_quality', 0):.1f} → Second half avg: {ind.get('second_half_avg_quality', 0):.1f}")
+    with ic2:
+        ft = ind.get("frustration_trend", "stable")
+        ft_icon = "📈" if ft == "improving" else ("📉" if ft == "declining" else "➡️")
+        st.metric("Frustration Trend", f"{ft_icon} {ft.title()}")
+
+    # Top coaching recommendations
+    st.subheader("🎓 Most Frequent Coaching Recommendations")
+    top_tips = db.get("top_coaching_recommendations", [])
+    if top_tips:
+        for i, tip in enumerate(top_tips, 1):
+            st.info(f"**{i}.** {tip}")
+    else:
+        st.info("No coaching recommendations aggregated yet.")
+
+    # Session history table
+    st.divider()
+    st.subheader("📋 Session History")
+    sessions = db.get("sessions", [])
+    if sessions:
+        import pandas as pd
+        rows = []
+        for s in sessions:
+            rows.append({
+                "Session ID": s.get("session_id", ""),
+                "Date": s.get("timestamp", "")[:10],
+                "Intent": s.get("dominant_intent", "").replace("_", " ").title(),
+                "Status": s.get("resolution_status", "").replace("_", " ").title(),
+                "Quality": f"{s.get('resolution_quality_total', 0):.1f}",
+                "Max Frustration": s.get("max_frustration", 0),
+                "Final Risk": s.get("final_escalation_risk", "low").upper(),
+            })
+        st.dataframe(pd.DataFrame(rows), use_container_width=True)

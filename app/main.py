@@ -32,10 +32,14 @@ from app.models.schemas import (
     KnowledgeRecommendationItem,
     KnowledgeRecommendationRequest,
     KnowledgeRecommendationResponse,
+    PostInteractionRequest,
+    PostInteractionResponse,
 )
 from app.agents.simulator import generate_customer_turn
 from app.agents.intent_sentiment import analyze_customer_message
 from app.agents.knowledge import recommend_knowledge
+from app.agents.summary import generate_post_interaction_report
+from app.agents.analytics import save_session, get_dashboard, clear_all_sessions
 
 
 app = FastAPI(title="Support RAG API")
@@ -652,3 +656,66 @@ def get_knowledge_recommendations(request: KnowledgeRecommendationRequest):
             status_code=500,
             detail=f"Recommendation retrieval failed: {type(exc).__name__}: {exc}"
         )
+
+
+# ---------------------------------------------------------
+# Post-Interaction Summary Endpoint (Task 8)
+# ---------------------------------------------------------
+
+@app.post("/summary/post-interaction")
+def post_interaction_summary(request: PostInteractionRequest):
+    try:
+        print("\n================ POST-INTERACTION SUMMARY REQUEST ================")
+        report = generate_post_interaction_report(
+            conversation=request.conversation,
+            session_id=request.session_id,
+        )
+        return {"success": True, "report": report}
+    except Exception as exc:
+        print("SUMMARY ERROR:", repr(exc))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Summary generation failed: {type(exc).__name__}: {exc}"
+        )
+
+
+# ---------------------------------------------------------
+# Analytics Endpoints (Task 8)
+# ---------------------------------------------------------
+
+@app.post("/analytics/session")
+def save_analytics_session(report: dict):
+    """Save a completed PostInteractionReport to the session store."""
+    try:
+        record = save_session(report)
+        return {"success": True, "record": record}
+    except Exception as exc:
+        print("ANALYTICS SAVE ERROR:", repr(exc))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to save session: {type(exc).__name__}: {exc}"
+        )
+
+
+@app.get("/analytics/dashboard")
+def analytics_dashboard():
+    """Aggregate all saved sessions and return performance analytics dashboard."""
+    try:
+        dashboard = get_dashboard()
+        return {"success": True, "dashboard": dashboard}
+    except Exception as exc:
+        print("ANALYTICS DASHBOARD ERROR:", repr(exc))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Dashboard generation failed: {type(exc).__name__}: {exc}"
+        )
+
+
+@app.delete("/analytics/sessions")
+def clear_analytics_sessions():
+    """Clear all saved session records."""
+    try:
+        count = clear_all_sessions()
+        return {"success": True, "deleted": count}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))

@@ -1,0 +1,69 @@
+[
+  {
+    "session_id": "123",
+    "timestamp": "2026-10-07T17:12:48.360913",
+    "scenario": "General",
+    "total_turns": 0,
+    "resolution_status": "resolved",
+    "resolution_quality_total": 80.0,
+    "max_frustration": 5,
+    "final_sentiment": "positive",
+    "final_escalation_risk": "low",
+    "dominant_intent": "general",
+    "coaching_recommendations": [
+      "Tip 1"
+    ],
+    "agent_strengths": [],
+    "agent_weaknesses": []
+  },
+  {
+    "session_id": "172",
+    "timestamp": "2026-10-07T11:44:28.235855+00:00",
+    "scenario": "Refund",
+    "total_turns": 1,
+    "resolution_status": "unresolved",
+    "resolution_quality_total": 84.0,
+    "max_frustration": 6,
+    "final_sentiment": "negative",
+    "final_escalation_risk": "medium",
+    "dominant_intent": "refund",
+    "coaching_recommendations": [
+      "Respond promptly to acknowledge the customer's frustration and validate their concerns.",
+      "Investigate the order status thoroughly and provide a clear explanation for the delay.",
+      "Offer a concrete resolution, such as expedited shipping, a discount, or a refund, based on company policy.",
+      "Maintain a calm and empathetic tone to de-escalate the situation and retain the customer's trust."
+    ],
+    "agent_strengths": [
+      "Demonstrated consistent empathy throughout the conversation",
+      "Maintained clear and coherent communication",
+      "Successfully guided the conversation toward resolution",
+      "Maintained professional tone and followed support guidelines"
+    ],
+    "agent_weaknesses": []
+  },
+  {
+    "session_id": "176",
+    "timestamp": "2026-10-07T11:50:18.234800+00:00",
+    "scenario": "Refund",
+    "total_turns": 7,
+    "resolution_status": "escalated",
+    "resolution_quality_total": 60.0,
+    "max_frustration": 10,
+    "final_sentiment": "negative",
+    "final_escalation_risk": "critical",
+    "dominant_intent": "refund",
+    "coaching_recommendations": [
+      "Practice de-escalation techniques - acknowledge frustration explicitly before offering solutions",
+      "Always confirm resolution explicitly by asking 'Does this fully resolve your concern?' before closing",
+      "For high-risk interactions, offer supervisor escalation proactively before the customer demands it"
+    ],
+    "agent_strengths": [
+      "Demonstrated consistent empathy throughout the conversation",
+      "Maintained clear and coherent communication",
+      "Maintained professional tone and followed support guidelines"
+    ],
+    "agent_weaknesses": [
+      "Issue resolution was incomplete - follow up with actionable next steps"
+    ]
+  }
+]
