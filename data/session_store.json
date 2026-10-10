@@ -65,5 +65,96 @@
     "agent_weaknesses": [
       "Issue resolution was incomplete - follow up with actionable next steps"
     ]
+  },
+  {
+    "session_id": "177",
+    "timestamp": "2026-10-07T13:17:29.835335+00:00",
+    "scenario": "Refund",
+    "total_turns": 3,
+    "resolution_status": "escalated",
+    "resolution_quality_total": 60.0,
+    "max_frustration": 10,
+    "final_sentiment": "negative",
+    "final_escalation_risk": "high",
+    "dominant_intent": "refund",
+    "coaching_recommendations": [
+      "Practice de-escalation techniques - acknowledge frustration explicitly before offering solutions",
+      "Always confirm resolution explicitly by asking 'Does this fully resolve your concern?' before closing",
+      "For high-risk interactions, offer supervisor escalation proactively before the customer demands it"
+    ],
+    "agent_strengths": [
+      "Demonstrated consistent empathy throughout the conversation",
+      "Maintained clear and coherent communication",
+      "Maintained professional tone and followed support guidelines"
+    ],
+    "agent_weaknesses": [
+      "Issue resolution was incomplete - follow up with actionable next steps"
+    ]
+  },
+  {
+    "session_id": "179",
+    "timestamp": "2026-10-07T15:03:42.929030+00:00",
+    "scenario": "Refund",
+    "total_turns": 1,
+    "resolution_status": "partially_resolved",
+    "resolution_quality_total": 88.0,
+    "max_frustration": 1,
+    "final_sentiment": "neutral",
+    "final_escalation_risk": "low",
+    "dominant_intent": "refund",
+    "coaching_recommendations": [
+      "Continue your strong performance - maintain the empathy and clarity shown in this session"
+    ],
+    "agent_strengths": [
+      "Demonstrated consistent empathy throughout the conversation",
+      "Maintained clear and coherent communication",
+      "Successfully guided the conversation toward resolution",
+      "Maintained professional tone and followed support guidelines"
+    ],
+    "agent_weaknesses": []
+  },
+  {
+    "session_id": "180",
+    "timestamp": "2026-10-07T15:23:35.874465+00:00",
+    "scenario": "Refund",
+    "total_turns": 5,
+    "resolution_status": "partially_resolved",
+    "resolution_quality_total": 84.0,
+    "max_frustration": 10,
+    "final_sentiment": "neutral",
+    "final_escalation_risk": "low",
+    "dominant_intent": "refund",
+    "coaching_recommendations": [
+      "Practice de-escalation techniques - acknowledge frustration explicitly before offering solutions"
+    ],
+    "agent_strengths": [
+      "Demonstrated consistent empathy throughout the conversation",
+      "Maintained clear and coherent communication",
+      "Successfully guided the conversation toward resolution",
+      "Maintained professional tone and followed support guidelines"
+    ],
+    "agent_weaknesses": []
+  },
+  {
+    "session_id": "181",
+    "timestamp": "2026-10-10T16:35:44.637034+00:00",
+    "scenario": "Refund",
+    "total_turns": 1,
+    "resolution_status": "partially_resolved",
+    "resolution_quality_total": 88.0,
+    "max_frustration": 1,
+    "final_sentiment": "neutral",
+    "final_escalation_risk": "low",
+    "dominant_intent": "refund",
+    "coaching_recommendations": [
+      "Continue your strong performance - maintain the empathy and clarity shown in this session"
+    ],
+    "agent_strengths": [
+      "Demonstrated consistent empathy throughout the conversation",
+      "Maintained clear and coherent communication",
+      "Successfully guided the conversation toward resolution",
+      "Maintained professional tone and followed support guidelines"
+    ],
+    "agent_weaknesses": []
   }
 ]
